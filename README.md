@@ -1,4 +1,4 @@
-# EMD 538 Quantitative Methods for Infectious Disease Epidemiology - Assignment Code
+# Quantitative Methods for Infectious Disease Epidemiology
 
 This repository contains my assignment code for **EMD 538: Quantitative Methods for Infectious Disease Epidemiology**, a graduate-level course focused on statistical and computational methods for analyzing infectious disease data.
 
