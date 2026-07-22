@@ -1,12 +1,12 @@
 ---
-title: "PS5"
+title: "rota_CA"
 author: "Hanyu Wang"
 output:
   pdf_document:
     latex_engine: xelatex
 ---
 
-The dataset ‘problemset5.RData’ (in the Problem Sets folder under Resources) contains data on positive laboratory tests for rotavirus (“rotaCA”)* reported weekly to the National Respiratory and Enteric Viral Surveillance System (NREVSSLinks to an external site.) from the state of California for July 1991 to June 2006 (“time”).  The rotavirus season in the northern hemisphere is typically considered to start in July and end in June; the vector “week” gives the week of the season (from 1 to 52) for the entire period of observation. Rotavirus vaccine was introduced in the US in 2006 with doses administered to infants at 2, 4, and 6 months of age.
+The dataset ‘rota_19912006.RData’ (in the Problem Sets folder under Resources) contains data on positive laboratory tests for rotavirus (“rotaCA”)* reported weekly to the National Respiratory and Enteric Viral Surveillance System (NREVSSLinks to an external site.) from the state of California for July 1991 to June 2006 (“time”).  The rotavirus season in the northern hemisphere is typically considered to start in July and end in June; the vector “week” gives the week of the season (from 1 to 52) for the entire period of observation. Rotavirus vaccine was introduced in the US in 2006 with doses administered to infants at 2, 4, and 6 months of age.
 
 *Note: This is not the “real” data from NREVSS (due to data sharing restrictions), but it is consistent with the actual data.
 
@@ -16,8 +16,8 @@ library(tidyverse)
 
 
 ```{r}
-load("/Users/macbook/Desktop/ps5.RData")
-rota <- as.data.frame(ps5)
+load("/Users/macbook/Desktop/rotaCA.RData")
+rota <- as.data.frame(rotaCA)
 ```
 
 ```{r}
