@@ -16,8 +16,8 @@ library(tidyverse)
 
 
 ```{r}
-load("/Users/macbook/Desktop/problemset5.RData")
-rota <- as.data.frame(problemset5)
+load("/Users/macbook/Desktop/ps5.RData")
+rota <- as.data.frame(ps5)
 ```
 
 ```{r}
