@@ -1,5 +1,5 @@
 ---
-title: "Problem Set 2"
+title: "PS2"
 author: "Hanyu Wang, Zhiyu Wang"
 output: pdf_document
 ---
