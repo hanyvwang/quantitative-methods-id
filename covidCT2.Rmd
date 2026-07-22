@@ -1,5 +1,5 @@
 ---
-title: "PS3"
+title: "covidCT2"
 author: "Hanyu Wang"
 output: pdf_document
 ---
