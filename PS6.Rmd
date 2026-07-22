@@ -5,7 +5,7 @@ output: pdf_document
 ---
 
 ```{r}
-load("/Users/macbook/Desktop/finalexamitis2025.RData")
+load("/Users/macbook/Desktop/epi2025.RData")
 ```
 
 # Q1
@@ -23,7 +23,7 @@ f <- L / v # ratio of the latent period to the serial interval
 ```{r}
 # Fit a Poisson regression to the log of the cumulative number of cases
 t <- 1:7
-CumCasesE <- cumsum(finalexamitis2025$ObsCases[1:7])
+CumCasesE <- cumsum(epi2025$ObsCases[1:7])
 mod <- glm(CumCasesE ~ t, family = poisson) 
 # The default link of poisson is log link
 
@@ -44,7 +44,7 @@ R0 for this epidemic, as measured from the growth rate over the first 7 days of 
 ## 1B.  Plot the case reproductive number Rt for each day of the epidemic. What is the last day for which Rt >1? (8 pts)
 
 ```{r}
-obsV <- finalexamitis2025$serint / 24
+obsV <- epi2025$serint / 24
 ```
 
 ```{r}
@@ -74,12 +74,12 @@ g <- dgamma(1:100, shape = gpars[1], rate = gpars[2])
 p <- matrix(0, nrow = 100, ncol = 99)
 
 # Loop over days starting from day 2 (day 1 has no previous cases)
-for (i in 2:length(finalexamitis2025$ObsCases)) {
-  if (finalexamitis2025$ObsCases[i] > 0) {
+for (i in 2:length(epi2025$ObsCases)) {
+  if (epi2025$ObsCases[i] > 0) {
     # Loop over all previous days (potential infectors)
     for (j in 1:(i - 1)) {
       # Only consider previous days with actual cases
-      if (finalexamitis2025$ObsCases[j] > 0) {
+      if (epi2025$ObsCases[j] > 0) {
         # Compute p[i,j] = probability a case on day i was infected by day j
         # Numerator: g[i-j] = probability of infection after (i-j) days
         # Denominator: sum of "infectious pressure" from all previous days
@@ -88,7 +88,7 @@ for (i in 2:length(finalexamitis2025$ObsCases)) {
         #   REMEMBER: %*% = matrix multiplication operator, multiplies each
         #   serial interval probability by the number of cases on that day
         p[i, j] <- g[i - j] / (g[
-          seq(i - 1, 1, -1)] %*% finalexamitis2025$ObsCases[1:(i - 1)])
+          seq(i - 1, 1, -1)] %*% epi2025$ObsCases[1:(i - 1)])
       }
     }
   }
@@ -102,13 +102,13 @@ R0 # value we will compare Rj to
 Rj <- rep(NA, 30)
 
 # Loop over each day t
-for (t in 1:length(finalexamitis2025$ObsCases)) {
+for (t in 1:length(epi2025$ObsCases)) {
   # Rj[t] = expected number of secondary cases caused by cases on day t
-  Rj[t] <- p[t:length(finalexamitis2025$ObsCases), t] %*%finalexamitis2025$ObsCases[t:length(finalexamitis2025$ObsCases)]}
+  Rj[t] <- p[t:length(epi2025$ObsCases), t] %*%epi2025$ObsCases[t:length(epi2025$ObsCases)]}
 
 ## the code above is
-## Rj[t] <- p[t:length(finalexamitis2025$ObsCases), t] %*%
-## finalexamitis2025$ObsCases[t:length(finalexamitis2025$ObsCases)]}
+## Rj[t] <- p[t:length(epi2025$ObsCases), t] %*%
+## epi2025$ObsCases[t:length(epi2025$ObsCases)]}
 
 Rj 
 # The number of secondary cases that the people on that day caused 
@@ -119,7 +119,7 @@ Rj
 mean(Rj[1:25][Rj[1:25] > 0])
 
 # Make a plot of Rj
-plot(Rj[1:length(finalexamitis2025$ObsCases)], type = "h", col = "blue", lwd = 5)
+plot(Rj[1:length(epi2025$ObsCases)], type = "h", col = "blue", lwd = 5)
 abline(h = 1, col = "red", lty = 2) # R0=1
 abline(h = mean(Rj[Rj > 0]), col = "orange") # Mean
 
@@ -153,7 +153,7 @@ Since $R_t>1$, it means that disease spread, epidemic can spread, but not guaran
 ```{r}
 set.seed(123)
 
-RepCases <- sum(finalexamitis2025$ObsCases)  # = 795
+RepCases <- sum(epi2025$ObsCases)  # = 795
 
 TotCases <- rep(NA, 10000)
 
@@ -208,7 +208,7 @@ No, incomplete observation of all infectious individuals should not bias our est
 ## 3A.  What is the estimated crude secondary attack rate (SAR), assuming there was (at most) one index case in each dorm room and NO on-going transmission?  (HINT: The index case, if there is one, is included in the “dorm.outbreak” table.  Hence, the number of secondary cases is equal to the number infected minus 1, and the number of roommates is equal to the number living in the dorm room minus 1.)
 
 ```{r}
-print(finalexamitis2025$dorm.outbreak)
+print(epi2025$dorm.outbreak)
 ```
 
 
@@ -217,30 +217,30 @@ print(finalexamitis2025$dorm.outbreak)
 # the number of secondary cases is equal to the number infected minus 1
 
 # secondary cases = infected - 1
-sum(finalexamitis2025$dorm.outbreak[1,])*0 +
-  sum(finalexamitis2025$dorm.outbreak[2,])*(1-1) +
-  sum(finalexamitis2025$dorm.outbreak[3,])*(2-1) +
-  sum(finalexamitis2025$dorm.outbreak[4,])*(3-1) +
-  sum(finalexamitis2025$dorm.outbreak[5,])*(4-1) +
-  sum(finalexamitis2025$dorm.outbreak[6,])*(5-1) +
-  sum(finalexamitis2025$dorm.outbreak[7,])*(6-1) +
-  sum(finalexamitis2025$dorm.outbreak[8,])*(7-1) +
-  sum(finalexamitis2025$dorm.outbreak[9,])*(8-1) +
-  sum(finalexamitis2025$dorm.outbreak[10,])*(9-1) # 143
+sum(epi2025$dorm.outbreak[1,])*0 +
+  sum(epi2025$dorm.outbreak[2,])*(1-1) +
+  sum(epi2025$dorm.outbreak[3,])*(2-1) +
+  sum(epi2025$dorm.outbreak[4,])*(3-1) +
+  sum(epi2025$dorm.outbreak[5,])*(4-1) +
+  sum(epi2025$dorm.outbreak[6,])*(5-1) +
+  sum(epi2025$dorm.outbreak[7,])*(6-1) +
+  sum(epi2025$dorm.outbreak[8,])*(7-1) +
+  sum(epi2025$dorm.outbreak[9,])*(8-1) +
+  sum(epi2025$dorm.outbreak[10,])*(9-1) # 143
 
 # Denominator of SAR (How many individuals were at risk (susceptible)?)
 # the number of roommates is equal to the number living in the dorm room minus 1
 
 # susceptible contacts = room size - 1
-sum(finalexamitis2025$dorm.outbreak[,1])*0 +
-  sum(finalexamitis2025$dorm.outbreak[,2])*1 + 
-  sum(finalexamitis2025$dorm.outbreak[,3])*2 + 
-  sum(finalexamitis2025$dorm.outbreak[,4])*3 + 
-  sum(finalexamitis2025$dorm.outbreak[,5])*4 + 
-  sum(finalexamitis2025$dorm.outbreak[,6])*5 + 
-  sum(finalexamitis2025$dorm.outbreak[,7])*6 + 
-  sum(finalexamitis2025$dorm.outbreak[,8])*7 + 
-  sum(finalexamitis2025$dorm.outbreak[,9])*8 # 357
+sum(epi2025$dorm.outbreak[,1])*0 +
+  sum(epi2025$dorm.outbreak[,2])*1 + 
+  sum(epi2025$dorm.outbreak[,3])*2 + 
+  sum(epi2025$dorm.outbreak[,4])*3 + 
+  sum(epi2025$dorm.outbreak[,5])*4 + 
+  sum(epi2025$dorm.outbreak[,6])*5 + 
+  sum(epi2025$dorm.outbreak[,7])*6 + 
+  sum(epi2025$dorm.outbreak[,8])*7 + 
+  sum(epi2025$dorm.outbreak[,9])*8 # 357
   
 
 # Thus, an estimated SAR is:
@@ -291,7 +291,7 @@ longiniLL <- function(pars, data) {
 ```{r}
 # Find optimal values of B and Q by minimizing the negative log-likelihood
 
-BQest <- optim(c(0.8, 0.2), longiniLL, data = finalexamitis2025$dorm.outbreak)$par
+BQest <- optim(c(0.8, 0.2), longiniLL, data = epi2025$dorm.outbreak)$par
 BQest # 0.5472099 0.9252978
 ```
 
@@ -436,9 +436,9 @@ This estimate is expected to be biased, because unvaccinated students in Frankli
 ## 6A.	What is/are the dominant period(s) of oscillation in the FLI time series, and has it changed over time? (8 pts)
 
 ```{r}
-logfe <- log(finalexamitis2025$FLI) 
+logfe <- log(epi2025$FLI) 
 
-tmax <- length(finalexamitis2025$FLI)
+tmax <- length(epi2025$FLI)
 
 # dt: time step in years
 dt <- 1/52 # weekly case reports
@@ -480,8 +480,8 @@ There is evidence that it changes over time -- there is a high peak at 3.25 year
 ## 6B.  Assuming the AutomaticA vaccine was introduced in April 2030 (week 248), what was the amplitude of biannual (i.e. twice per year) peaks in FLI cases before and after vaccine introduction? (7 pts)
 
 ```{r}
-time_before <- finalexamitis2025$time[1:248]
-time_after <- finalexamitis2025$time[248:length(finalexamitis2025$time)]
+time_before <- epi2025$time[1:248]
+time_after <- epi2025$time[248:length(epi2025$time)]
 ```
 
 before vaccine introduction
@@ -541,7 +541,7 @@ df <- data.frame(
 )
 
 # Fit harmonic regression
-mod_after <- glm(logfe[248:length(finalexamitis2025$time)] ~ cos6 + sin6 + time_after)
+mod_after <- glm(logfe[248:length(epi2025$time)] ~ cos6 + sin6 + time_after)
 ```
 
 
